@@ -1,6 +1,10 @@
 <resources>
+    <!--LoginActivity-->
     <string name="app_name">VirtualCloset</string>
     <string name="email_hint">E-mail</string>
     <string name="password_hint">Password</string>
     <string name="login_text">Log in</string>
+
+    <!--RegisterActivity-->
+    <string name="already_account"><u>Already have an account? Log in.</u></string>
 </resources>
