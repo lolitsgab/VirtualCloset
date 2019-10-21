@@ -1,9 +1,8 @@
 <resources>
     <!--LoginActivity-->
-    <string name="app_name">VirtualCloset</string>
-    <string name="email_hint">E-mail</string>
-    <string name="password_hint">Password</string>
-    <string name="login_text">Log in</string>
+    <string name="app_name">STYLINE</string>
+    <string name="login_text">LOG IN</string>
+    <string name="register_account"><u>Need an account? Click here!.</u></string>
 
     <!--RegisterActivity-->
     <string name="already_account"><u>Already have an account? Log in.</u></string>
