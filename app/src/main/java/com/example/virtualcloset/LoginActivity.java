@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,27 +21,32 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText password, email;
-    private Button login_button;
+    private ImageView login_button;
     private ProgressBar progress;
-
+    private TextView register_account;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
-        progress = findViewById(R.id.log_in_progress);
-        password = findViewById(R.id.password_login_field);
-        email = findViewById(R.id.email_login_field);
-        login_button = findViewById(R.id.log_in_button);
-
+        progress = this.findViewById(R.id.progress);
+        password = this.findViewById(R.id.password);
+        email = this.findViewById(R.id.email);
+        login_button = this.findViewById(R.id.login_button);
+        register_account = this.findViewById(R.id.register_account);
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 attemptLogIn();
-                Toast.makeText(LoginActivity.this, "DEBUG MESSAGE\nEmail: " +
-                        email.getText() + "\nPassword: " + password.getText() +
-                        "\nLogging in now", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        register_account.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
             }
         });
     }
