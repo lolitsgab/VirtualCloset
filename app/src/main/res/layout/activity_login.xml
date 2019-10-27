@@ -102,6 +102,7 @@
                 android:layout_marginBottom="8dp"
                 android:background="@null"
                 android:hint="Password"
+                android:singleLine="true"
                 android:paddingLeft="10dp"
                 android:password="true"
                 android:textColor="@color/colorWhite"
