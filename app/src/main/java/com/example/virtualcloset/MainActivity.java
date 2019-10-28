@@ -1,7 +1,6 @@
 package com.example.virtualcloset;
 
 import android.os.Bundle;
-import android.widget.ImageView;
 
 import in.goodiebag.carouselpicker.CarouselPicker;
 import java.util.List;
@@ -11,23 +10,22 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-    private int mCurrentPage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
-        CarouselPicker carouselPicker = (CarouselPicker) findViewById(R.id.carousel);
+        final CarouselPicker carouselPicker = (CarouselPicker) findViewById(R.id.carousel);
         CarouselPicker carouselPicker2 =  (CarouselPicker) findViewById(R.id.carousel2);
 
 // Case 1 : To populate the picker with images
-        List<CarouselPicker.PickerItem> shirts = new ArrayList<>();
+        final List<CarouselPicker.PickerItem> shirts = new ArrayList<>();
         shirts.add(new CarouselPicker.DrawableItem(R.drawable.striped_guess));
         shirts.add(new CarouselPicker.DrawableItem(R.drawable.carhart_shirt));
         shirts.add(new CarouselPicker.DrawableItem(R.drawable.stussy_crewneck));
 
-        List<CarouselPicker.PickerItem> bottoms = new ArrayList<>();
+        final List<CarouselPicker.PickerItem> bottoms = new ArrayList<>();
         bottoms.add(new CarouselPicker.DrawableItem(R.drawable.jeans));
         bottoms.add(new CarouselPicker.DrawableItem(R.drawable.black_jeans));
         bottoms.add(new CarouselPicker.DrawableItem(R.drawable.striped_pants));
@@ -45,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
-
 
             @Override
             public void onPageSelected(int position) {
