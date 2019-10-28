@@ -4,136 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/grey_background"
     tools:context=".MainActivity">
 
-
-    <ImageView
-        android:id="@+id/peachBar"
-        android:layout_width="414dp"
-        android:layout_height="78dp"
-        android:layout_marginBottom="664dp"
-        android:src="@drawable/that_bar"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05" />
-
-    <ImageView
-        android:id="@+id/stylineTitle"
-        android:layout_width="245dp"
-        android:layout_height="89dp"
-        android:src="@drawable/styline"
-        app:layout_constraintBottom_toBottomOf="@+id/peachBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <in.goodiebag.carouselpicker.CarouselPicker
-        android:id="@+id/carousel"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="32dp"
-        android:background="#E5E7E9"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        app:items_visible="three"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/peachBar" />
-
-    <in.goodiebag.carouselpicker.CarouselPicker
-        android:id="@+id/carousel2"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="#E5E7E9"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        app:items_visible="three"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/carousel" />
-
-    <ImageView
-        android:layout_width="46dp"
-        android:layout_height="44dp"
-        android:src="@drawable/hamburger_menu"
-        app:layout_constraintBottom_toBottomOf="@+id/peachBar"
-        app:layout_constraintEnd_toStartOf="@+id/stylineTitle"
-        app:layout_constraintHorizontal_bias="0.432"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.486" />
-
-    <ImageView
-        android:layout_width="41dp"
-        android:layout_height="46dp"
-        android:src="@drawable/search_icon"
-        app:layout_constraintBottom_toBottomOf="@+id/peachBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.609"
-        app:layout_constraintStart_toEndOf="@+id/stylineTitle"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45" />
-
-    <ImageView
-        android:id="@+id/imageView8"
-        android:layout_width="411dp"
-        android:layout_height="89dp"
-        android:src="@drawable/bar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/carousel"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <ImageView
-        android:id="@+id/imageView9"
-        android:layout_width="82dp"
-        android:layout_height="81dp"
-        android:src="@drawable/camera"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/carousel"
-        app:layout_constraintVertical_bias="0.911" />
-
-    <ImageView
-        android:layout_width="55dp"
-        android:layout_height="48dp"
-        android:src="@drawable/camera_icon"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView9"
-        app:layout_constraintEnd_toEndOf="@+id/imageView9"
-        app:layout_constraintStart_toStartOf="@+id/imageView9"
-        app:layout_constraintTop_toTopOf="@+id/imageView9" />
-
-    <ImageView
-        android:layout_width="60dp"
-        android:layout_height="76dp"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/wardrobe"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView9"
-        app:layout_constraintHorizontal_bias="0.48"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView9"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <ImageView
-        android:layout_width="55dp"
-        android:layout_height="60dp"
-        android:src="@drawable/star"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imageView8"
-        app:layout_constraintStart_toEndOf="@+id/imageView9"
-        app:layout_constraintTop_toTopOf="@+id/imageView8" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

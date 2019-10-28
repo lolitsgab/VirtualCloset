@@ -9,6 +9,7 @@
     android:theme="@style/AppTheme.NoActionBar"
     tools:context=".SplashActivity">
 
+
     <!--
     <ImageView
         android:layout_width="30dp"
@@ -100,4 +101,3 @@
         -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

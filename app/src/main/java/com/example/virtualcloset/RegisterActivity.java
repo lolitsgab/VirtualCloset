@@ -37,13 +37,18 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         mAuth = FirebaseAuth.getInstance();
-        userEmail = this.findViewById(R.id.email);
-        userName = this.findViewById(R.id.user);
-        userPassword = this.findViewById(R.id.password);
-        userConfirm = this.findViewById(R.id.confirmPassword);
-        registerBtn = this.findViewById(R.id.rectangleRegister);
-        alreadyAcct = this.findViewById(R.id.alreadyAccount);
+        userEmail = findViewById(R.id.email);
+        userName = findViewById(R.id.user);
+        userPassword = findViewById(R.id.password);
+        userConfirm = findViewById(R.id.confirmPassword);
+        registerBtn = findViewById(R.id.rectangleRegister);
+        alreadyAcct = findViewById(R.id.alreadyAccount);
 
+
+        theirEmail = userEmail.getText().toString();
+        theirUserName = userName.getText().toString();
+        theirPassword = userPassword.getText().toString();
+        theirConfirm = userConfirm.getText().toString();
 
         // if user clicks TextView link, transfer them to traditional log in page
         alreadyAcct.setOnTouchListener(new OnTouchListener() {
@@ -58,38 +63,78 @@ public class RegisterActivity extends AppCompatActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if ((userPassword.getText().toString()).equals(userConfirm.getText().toString())) {
-                    if (!userEmail.getText().toString().isEmpty()) {
-                        sendToFireBase();
-
-                    }
+                if(readyToRegister()) {
+                    sendToFireBase();
+                }
+                else {
+                    Toast.makeText(RegisterActivity.this, "Database error", Toast.LENGTH_LONG).show();
                 }
             }
         });
 
+
     }
+
     // verifying that user information is acceptable
     private void sendToFireBase() {
-        mAuth.createUserWithEmailAndPassword(userEmail.getText().toString(), userPassword.getText().toString())
+        mAuth.createUserWithEmailAndPassword(theirEmail, theirPassword)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
+
                             FirebaseUser user = mAuth.getCurrentUser();
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(userName.getText().toString())
+                                    .setDisplayName(theirUserName)
                                     .build();
                             Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                             startActivity(intent);
-                        }
-                        else {
+                        } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(RegisterActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
 
                         }
+
                     }
                 });
+    }
+    private boolean readyToRegister() {
+
+        if(theirEmail.isEmpty()) {
+            Toast.makeText(this, "Please enter a email", Toast.LENGTH_LONG).show();
+            return false;
         }
+
+        if(theirUserName.isEmpty()) {
+            Toast.makeText(this, "Please enter a username", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if(theirUserName.length() < 5) {
+            Toast.makeText(this, "Username must be more than 5 characters",
+                    Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if(theirPassword.isEmpty()) {
+            Toast.makeText(this, "Please enter a password", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if(theirPassword.length() < 8) {
+            Toast.makeText(this, "Password must be more than 8 characters", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if(theirConfirm.isEmpty()) {
+            Toast.makeText(this, "Please confirm password", Toast.LENGTH_LONG);
+            return false;
+        }
+        if(!theirConfirm.equals(theirPassword)) {
+            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
+    }
+
 }
