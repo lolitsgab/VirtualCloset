@@ -68,7 +68,6 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
     }
-
     // verifying that user information is acceptable
     private void sendToFireBase() {
         mAuth.createUserWithEmailAndPassword(userEmail.getText().toString(), userPassword.getText().toString())
@@ -83,14 +82,14 @@ public class RegisterActivity extends AppCompatActivity {
                                     .build();
                             Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                             startActivity(intent);
-                        } else {
+                        }
+                        else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(RegisterActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
 
                         }
-
                     }
                 });
-    }
+        }
 }
