@@ -7,7 +7,6 @@
     android:background="@drawable/grey_background"
     tools:context=".MainActivity">
 
-
     <ImageView
         android:id="@+id/peachBar"
         android:layout_width="414dp"
@@ -136,4 +135,3 @@
         app:layout_constraintTop_toTopOf="@+id/imageView8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

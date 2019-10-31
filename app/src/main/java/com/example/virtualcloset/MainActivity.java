@@ -1,6 +1,9 @@
 package com.example.virtualcloset;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import in.goodiebag.carouselpicker.CarouselPicker;
 import java.util.List;
@@ -14,12 +17,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+      
         final CarouselPicker carouselPicker = (CarouselPicker) findViewById(R.id.carousel);
         CarouselPicker carouselPicker2 =  (CarouselPicker) findViewById(R.id.carousel2);
 
-// Case 1 : To populate the picker with images
+        // Case 1 : To populate the picker with images
         final List<CarouselPicker.PickerItem> shirts = new ArrayList<>();
         shirts.add(new CarouselPicker.DrawableItem(R.drawable.striped_guess));
         shirts.add(new CarouselPicker.DrawableItem(R.drawable.carhart_shirt));
@@ -29,10 +31,12 @@ public class MainActivity extends AppCompatActivity {
         bottoms.add(new CarouselPicker.DrawableItem(R.drawable.jeans));
         bottoms.add(new CarouselPicker.DrawableItem(R.drawable.black_jeans));
         bottoms.add(new CarouselPicker.DrawableItem(R.drawable.striped_pants));
-//Create an adapter
+        
+        //Create an adapter
         CarouselPicker.CarouselViewAdapter imageAdapter = new CarouselPicker.CarouselViewAdapter(this, shirts, 0);
         CarouselPicker.CarouselViewAdapter imageAdapter2 = new CarouselPicker.CarouselViewAdapter(this, bottoms, 0);
-//Set the adapter
+        
+        //Set the adapter
         carouselPicker.setAdapter(imageAdapter);
         carouselPicker2.setAdapter(imageAdapter2);
 
