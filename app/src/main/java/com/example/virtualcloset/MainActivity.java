@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         shirts.add(new CarouselPicker.DrawableItem(R.drawable.stussy_crewneck));
 
         final List<CarouselPicker.PickerItem> bottoms = new ArrayList<>();
-        bottoms.add(new CarouselPicker.DrawableItem(R.drawable.jeans));
+        bottoms.add(new CarouselPicker.DrawableItem(R.drawable.denim_jeans));
         bottoms.add(new CarouselPicker.DrawableItem(R.drawable.black_jeans));
         bottoms.add(new CarouselPicker.DrawableItem(R.drawable.striped_pants));
         
@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         CarouselPicker.CarouselViewAdapter imageAdapter2 = new CarouselPicker.CarouselViewAdapter(this, bottoms, 0);
         
         //Set the adapter
+        carouselPicker.setFilterTouchesWhenObscured(true);
+        carouselPicker2.setFilterTouchesWhenObscured(true);
         carouselPicker.setAdapter(imageAdapter);
         carouselPicker2.setAdapter(imageAdapter2);
 
