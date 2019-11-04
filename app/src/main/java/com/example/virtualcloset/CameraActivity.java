@@ -6,9 +6,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
+
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -19,16 +23,23 @@ import com.camerakit.CameraKit;
 import com.camerakit.CameraKitView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel;
+import com.google.firebase.ml.vision.label.FirebaseVisionImageLabeler;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class CameraActivity extends AppCompatActivity {
@@ -124,20 +135,9 @@ public class CameraActivity extends AppCompatActivity {
     private View.OnClickListener acceptListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            // Create the path we want to upload our file to.
-            // @TODO(Gabriel): Integrate this with Cloud Vision to dynamically get the clothing type
-            // {shirt or pants or shoes or etc...}.
-            String uniqueImageName = UUID.randomUUID().toString();
-            String savePath = "users/" + UserUID + "/clothes/shirts/" + uniqueImageName;
-
-            // Put image from out ImageView into a bitmap.
+            // Get image out of ImageView into a bitmap.
             Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-
-            // Convert the bitmap into a ByteStream and compress into a JPEG (as a byte array).
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-            byte[] data = outputStream.toByteArray();
-            startUpload(new ByteArrayInputStream(data), savePath);
+            labelAndUpload(bitmap);
         }
     };
 
@@ -172,15 +172,13 @@ public class CameraActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             if (data == null) {
                 Toast.makeText(this, "Unable to retrieve image.", Toast.LENGTH_LONG).show();
-                return;
-            }
-            try {
-                String uniqueImageName = UUID.randomUUID().toString();
-                String savePath = ("users/" + UserUID + "/clothes/shirts/" + uniqueImageName);
-                InputStream inputStream = this.getContentResolver().openInputStream(data.getData());
-                startUpload(inputStream, savePath);
-            } catch (FileNotFoundException e) {
-                Toast.makeText(this, "Unable to upload image", Toast.LENGTH_LONG).show();
+            } else{
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+                    labelAndUpload(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -190,10 +188,67 @@ public class CameraActivity extends AppCompatActivity {
         cameraKitView.onStart();
     }
 
-    public void startUpload(InputStream inputStream, String savePath) {
+    public void labelAndUpload(final Bitmap bitmap) {
+        // Label here
+        FirebaseVisionImage imageToLabel = FirebaseVisionImage.fromBitmap(bitmap);
+        FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance()
+                .getCloudImageLabeler();
+        labeler.processImage(imageToLabel)
+                .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionImageLabel>>() {
+                    @Override
+                    public void onSuccess(List<FirebaseVisionImageLabel> labels) {
+                        // Possible labels
+                        Set<String> bottom_labels = new HashSet<>(Arrays.asList("trousers", "pants",
+                                "skirt", "jeans", "sweatpants", "trunks", "khaki", "joggers","shorts",
+                                "skinny jeans", "mini skirt", "chinos", "cargo pants", "cargo shorts"));
+                        Set<String> top_labels = new HashSet<>(Arrays.asList("t-shirt", "shirt",
+                                "polo shirt", "polo", "dress shirt", "blouse",
+                                "sleeveless shirt", "jacket", "sherpa", "sweatshirt", "windbreaker",
+                                "sweater", "hoodie", "Blazer"));
+                        String type = "";
+                        String metaType = "";
+                        for (FirebaseVisionImageLabel label: labels) {
+                            metaType = label.getText();
+                            if (top_labels.contains(metaType.toLowerCase())) {
+                                type = "top";
+                                break;
+                            } else if (bottom_labels.contains(metaType.toLowerCase())) {
+                                type = "bottom";
+                                break;
+                            }
+                        }
+                        if (type.length() == 0) {
+                            Toast.makeText(CameraActivity.this, "Unrecognizable!", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        Toast.makeText(CameraActivity.this, "Type: " + type +
+                                "\nMeta: " + metaType , Toast.LENGTH_LONG).show();
+                        upload(bitmap, type);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(CameraActivity.this,
+                                "Failed to label & upload!",
+                                Toast.LENGTH_LONG).show();
+                        Log.e("MYAPP", "exception", e);
+                    }
+                });
+    }
+
+    public void upload(Bitmap bitmap, String type) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, baos);
+        byte[] data = baos.toByteArray();
+
+        // Define where we will save the image
+        String uniqueImageName = UUID.randomUUID().toString();
+        String savePath = "users/" + UserUID + "/clothes/" + type + "/" + uniqueImageName;
+
         // Start uploading, and set listeners to treat a successful/failed upload.
         StorageReference uploadRef = storageRef.child(savePath);
-        UploadTask uploadTask = uploadRef.putStream(inputStream);
+        UploadTask uploadTask = uploadRef.putBytes(data);
         final ProgressBar progressBar = CameraActivity.this.findViewById(R.id.uploadProgress);
         progressBar.setVisibility(View.VISIBLE);
         uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -211,6 +266,7 @@ public class CameraActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
                 Intent intent = new Intent(CameraActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
