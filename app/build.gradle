@@ -44,13 +44,13 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.0'
     implementation 'com.github.GoodieBag:CarouselPicker:v1.1'
 
+
     implementation 'com.google.android.material:material:1.0.0'
 
     implementation "androidx.appcompat:appcompat:${appCompatVersion}"
     implementation "com.google.android.material:material:${designSupportVersion}"
 
     implementation 'com.android.support:design:28.2.0'
-
 
 }
 apply plugin: 'com.google.gms.google-services'
