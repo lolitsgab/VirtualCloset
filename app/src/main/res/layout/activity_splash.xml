@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+=======
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+>>>>>>> afeca0f84d2e6066ac6f70ac5cf15df99e20f71d
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+<<<<<<< HEAD
     android:background="@mipmap/splashbg"
+=======
+    android:background="@mipmap/closet"
+>>>>>>> afeca0f84d2e6066ac6f70ac5cf15df99e20f71d
     android:orientation="vertical"
     android:theme="@style/AppTheme.NoActionBar"
     tools:context=".SplashActivity">
 
+<<<<<<< HEAD
     <ImageView
         android:id="@+id/stylineTitle"
         android:layout_width="match_parent"
@@ -70,3 +79,112 @@
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
+=======
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="false"
+            android:layout_marginTop="45dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/styline1" />
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="-50dp"
+            android:src="@drawable/horizontal_line" />
+
+        <ImageView
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_marginLeft="240dp"
+            android:layout_marginTop="-60dp"
+            android:src="@drawable/hanger" />
+
+        <!--
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/vertical_line"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="-100dp"/>
+            -->
+
+        <TextView
+            android:id="@+id/imagine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/helveticaneue_lightcondensed"
+            android:text="@string/imagine_text"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/possibilities"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="0dp"
+            android:fontFamily="@font/helveticaneue_lightitalic"
+            android:text="@string/possibilities_text"
+            android:textSize="25sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/splash_button_rectangle"
+            android:fontFamily="@font/helveticaneue_medium"
+            android:text="@string/login_text"
+            android:textColor="@color/colorWhite"
+            android:textSize="15sp" />
+
+
+        <Button
+            android:id="@+id/signupButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="100dp"
+            android:layout_weight="1"
+            android:background="@drawable/splash_button_rectangle2"
+            android:fontFamily="@font/helveticaneue_medium"
+            android:text="@string/signup_text"
+            android:textColor="@color/colorWhite"
+            android:textSize="15sp" />
+
+        <!--
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_horizontal"
+            android:layout_marginTop="180dp"
+            android:text="your wardrobe at your fingertips"
+            android:textSize="15sp"
+            android:textColor="@color/colorBlack"
+            android:fontFamily="@font/helveticaneue_lightitalic"/>
+            -->
+
+    </LinearLayout>
+
+
+</LinearLayout>
+>>>>>>> afeca0f84d2e6066ac6f70ac5cf15df99e20f71d

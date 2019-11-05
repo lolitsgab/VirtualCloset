@@ -5,4 +5,9 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorTransparentWhite">#E2E2E2</color>
+<<<<<<< HEAD
+=======
+    <color name="colorGrey">#696969</color>
+    <color name="colorBlack">#000000</color>
+>>>>>>> afeca0f84d2e6066ac6f70ac5cf15df99e20f71d
 </resources>

@@ -1,6 +1,12 @@
 <resources>
     <!--SplashActivity-->
+<<<<<<< HEAD
     <string name="register_text">SIGN UP</string>
+=======
+    <string name="signup_text">SIGN UP</string>
+    <string name="imagine_text">Imagine the</string>
+    <string name="possibilities_text">possibilities</string>
+>>>>>>> afeca0f84d2e6066ac6f70ac5cf15df99e20f71d
 
     <!--LoginActivity-->
     <string name="app_name">STYLINE</string>
