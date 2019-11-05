@@ -5,4 +5,6 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorTransparentWhite">#E2E2E2</color>
+    <color name="FG_MODE">#1de9b6</color>
+    <color name="BG_MODE">#c62828</color>
 </resources>
