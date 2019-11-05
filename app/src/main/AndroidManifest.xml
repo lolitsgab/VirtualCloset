@@ -30,12 +30,11 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-<<<<<<< HEAD
+
         <activity
             android:name=".CameraActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-=======
->>>>>>> afeca0f84d2e6066ac6f70ac5cf15df99e20f71d
+
 
     </application>
 

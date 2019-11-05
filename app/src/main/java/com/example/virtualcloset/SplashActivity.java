@@ -19,10 +19,6 @@ public class SplashActivity extends AppCompatActivity {
 
         Button signUpButton = findViewById(R.id.signupButton);
         signUpButton.setOnClickListener(signUpButtonClickListener);
-<<<<<<< HEAD
-
-=======
->>>>>>> afeca0f84d2e6066ac6f70ac5cf15df99e20f71d
     }
 
     private View.OnClickListener loginButtonClickListener = new View.OnClickListener(){
