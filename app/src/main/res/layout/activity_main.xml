@@ -33,7 +33,7 @@
         app:layout_constraintVertical_bias="0.307" />
 
     <in.goodiebag.carouselpicker.CarouselPicker
-        android:id="@+id/carousel"
+        android:id="@+id/carouselTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
@@ -46,18 +46,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/peachBar" />
 
+
     <in.goodiebag.carouselpicker.CarouselPicker
-        android:id="@+id/carousel2"
+        android:id="@+id/carouselBottom"
         android:layout_width="wrap_content"
         android:layout_height="100dp"
+        android:layout_marginTop="144dp"
         android:background="#E5E7E9"
         android:focusable="true"
         android:focusableInTouchMode="true"
         app:items_visible="three"
+        app:layout_constraintBottom_toTopOf="@+id/cameraCircle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/carousel" />
+        app:layout_constraintTop_toBottomOf="@+id/carousel"
+        app:layout_constraintVertical_bias="0.0" />
+
 
     <ImageView
         android:id="@+id/hamburger"
@@ -91,9 +96,9 @@
         app:layout_constraintBottom_toTopOf="@+id/cameraCircle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.996"
-        app:layout_constraintStart_toStartOf="@+id/carousel"
         app:layout_constraintTop_toBottomOf="@+id/search"
         app:layout_constraintVertical_bias="0.052" />
+
 
     <ImageView
         android:id="@+id/whiteBar"
@@ -105,7 +110,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/carousel"
+        app:layout_constraintTop_toBottomOf="@+id/stylineTitle"
         app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
@@ -116,11 +121,11 @@
         app:layout_constraintBottom_toBottomOf="@+id/whiteBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/carousel"
+        app:layout_constraintTop_toBottomOf="@+id/stylineTitle"
         app:layout_constraintVertical_bias="0.948" />
 
     <ImageView
-        android:id="@+id/cameraIcon"
+        android:id="@+id/startCameraActivityButton"
         android:layout_width="39dp"
         android:layout_height="32dp"
         android:src="@drawable/camera_icon"

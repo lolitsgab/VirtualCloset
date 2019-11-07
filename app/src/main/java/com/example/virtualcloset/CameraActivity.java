@@ -53,6 +53,7 @@ public class CameraActivity extends AppCompatActivity {
     private ImageView exitCameraButton;
     private StorageReference storageRef;
     private String UserUID;
+    String savePath;
     public static final int PICK_IMAGE = 1;
 
     @Override
@@ -244,7 +245,7 @@ public class CameraActivity extends AppCompatActivity {
 
         // Define where we will save the image
         String uniqueImageName = UUID.randomUUID().toString();
-        String savePath = "users/" + UserUID + "/clothes/" + type + "/" + uniqueImageName;
+        savePath = "users/" + UserUID + "/clothes/" + type + "/" + uniqueImageName;
 
         // Start uploading, and set listeners to treat a successful/failed upload.
         StorageReference uploadRef = storageRef.child(savePath);
