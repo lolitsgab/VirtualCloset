@@ -11,7 +11,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -20,30 +19,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.camerakit.CameraKit;
 import com.camerakit.CameraKitView;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.ml.vision.FirebaseVision;
-import com.google.firebase.ml.vision.common.FirebaseVisionImage;
-import com.google.firebase.ml.vision.label.FirebaseVisionImageLabel;
-import com.google.firebase.ml.vision.label.FirebaseVisionImageLabeler;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
+import org.opencv.android.OpenCVLoader;
+
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
 public class CameraActivity extends AppCompatActivity {
     public static final int PICK_IMAGE = 1;
@@ -58,8 +45,42 @@ public class CameraActivity extends AppCompatActivity {
     private TextView drawMode;
     private StorageReference storageRef;
     private String UserUID;
+    private ProgressBar progressBar;
     private Animation animRotate;
     private ObjectAnimator CHANGE_MODE;
+    private final float MAX_SIZE = 600;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_camera);
+        OpenCVLoader.initDebug();
+
+        // Create a storage reference from our app
+        storageRef = FirebaseStorage.getInstance().getReference();
+
+        // Get a unique identifier for the currently logged in user
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        UserUID = user.getUid();
+
+        // Initialize all buttons
+        (cameraKitView = this.findViewById(R.id.camera)).setOnClickListener(onClickListener);
+        (captureButton = this.findViewById(R.id.cameraButton)).setOnClickListener(onClickListener);
+        (flashButton = this.findViewById(R.id.flashButton)).setOnClickListener(onClickListener);
+        (galleryButton = this.findViewById(R.id.galleryButton)).setOnClickListener(onClickListener);
+        (cancelButton = this.findViewById(R.id.cancelImage)).setOnClickListener(onClickListener);
+        (acceptButton = this.findViewById(R.id.acceptImage)).setOnClickListener(onClickListener);
+        (exitCameraButton = this.findViewById(R.id.exitCamera)).setOnClickListener(onClickListener);
+        (drawMode = this.findViewById(R.id.drawMode)).setOnClickListener(onClickListener);
+        imageView = this.findViewById(R.id.capturedView);
+        progressBar = findViewById(R.id.uploadProgress);
+
+        animRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
+        CHANGE_MODE = ObjectAnimator.ofInt(drawMode, "textColor",
+                Color.parseColor("#1de9b6"), Color.parseColor("#c62828"));
+        CHANGE_MODE.setEvaluator(new ArgbEvaluator());
+    }
+
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -86,8 +107,9 @@ public class CameraActivity extends AppCompatActivity {
                     break;
                 case R.id.acceptImage:
                     // Get image out of ImageView into a bitmap.
-                    Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-                    labelAndUpload(bitmap);
+                    Bitmap bitmap = imageView.original_bitmap;
+                    CameraActivityModel.labelAndUpload(CameraActivity.this, bitmap,
+                            imageView, progressBar, storageRef, UserUID);
                     break;
                 case R.id.cameraButton:
                     cameraKitView.captureImage(new CameraKitView.ImageCallback() {
@@ -131,44 +153,17 @@ public class CameraActivity extends AppCompatActivity {
         }
     };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
-
-        // Create a storage reference from our app
-        storageRef = FirebaseStorage.getInstance().getReference();
-
-        // Get a unique identifier for the currently logged in user
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        UserUID = user.getUid();
-
-        // Initialize all buttons
-        (cameraKitView = this.findViewById(R.id.camera)).setOnClickListener(onClickListener);
-        (captureButton = this.findViewById(R.id.cameraButton)).setOnClickListener(onClickListener);
-        (flashButton = this.findViewById(R.id.flashButton)).setOnClickListener(onClickListener);
-        (galleryButton = this.findViewById(R.id.galleryButton)).setOnClickListener(onClickListener);
-        (cancelButton = this.findViewById(R.id.cancelImage)).setOnClickListener(onClickListener);
-        (acceptButton = this.findViewById(R.id.acceptImage)).setOnClickListener(onClickListener);
-        (exitCameraButton = this.findViewById(R.id.exitCamera)).setOnClickListener(onClickListener);
-        (drawMode = this.findViewById(R.id.drawMode)).setOnClickListener(onClickListener);
-        imageView = this.findViewById(R.id.capturedView);
-
-        animRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
-        CHANGE_MODE = ObjectAnimator.ofInt(drawMode, "textColor",
-                Color.parseColor("#1de9b6"), Color.parseColor("#c62828"));
-        CHANGE_MODE.setEvaluator(new ArgbEvaluator());
-    }
-
     private void loadIntoDrawableImageView(Bitmap bmp) {
-        imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, imageView.getWidth(),
-                imageView.getHeight(), false));
+//        imageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, imageView.getWidth(),
+//                imageView.getHeight(), false));
+        bmp = CameraActivityModel.scaleDown(bmp, MAX_SIZE, true);
+        imageView.setImageBitmap(bmp);
 
         // Create a bitmap to store the drawn-on result
         Bitmap alteredBitmap = Bitmap.createBitmap(bmp.getWidth(),
                 bmp.getHeight(), bmp.getConfig());
         imageView.setNewImage(alteredBitmap, bmp);
-
+        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         // Remove the gallery, capture, and flash buttons from the view.
         captureButton.setVisibility(View.GONE);
@@ -210,89 +205,6 @@ public class CameraActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         cameraKitView.onStart();
-    }
-
-    public void labelAndUpload(final Bitmap bitmap) {
-        // Label here
-        FirebaseVisionImage imageToLabel = FirebaseVisionImage.fromBitmap(bitmap);
-        FirebaseVisionImageLabeler labeler = FirebaseVision.getInstance()
-                .getCloudImageLabeler();
-        labeler.processImage(imageToLabel)
-                .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionImageLabel>>() {
-                    @Override
-                    public void onSuccess(List<FirebaseVisionImageLabel> labels) {
-                        // Possible labels
-                        Set<String> bottom_labels = new HashSet<>(Arrays.asList("trousers", "pants",
-                                "skirt", "jeans", "sweatpants", "trunks", "khaki", "joggers", "shorts",
-                                "skinny jeans", "mini skirt", "chinos", "cargo pants", "cargo shorts"));
-                        Set<String> top_labels = new HashSet<>(Arrays.asList("t-shirt", "shirt",
-                                "polo shirt", "polo", "dress shirt", "blouse",
-                                "sleeveless shirt", "jacket", "sherpa", "sweatshirt", "windbreaker",
-                                "sweater", "hoodie", "Blazer"));
-                        String type = "";
-                        String metaType = "";
-                        for (FirebaseVisionImageLabel label : labels) {
-                            metaType = label.getText();
-                            if (top_labels.contains(metaType.toLowerCase())) {
-                                type = "top";
-                                break;
-                            } else if (bottom_labels.contains(metaType.toLowerCase())) {
-                                type = "bottom";
-                                break;
-                            }
-                        }
-                        if (type.length() == 0) {
-                            Toast.makeText(CameraActivity.this, "Unrecognizable!", Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                        Toast.makeText(CameraActivity.this, "Type: " + type +
-                                "\nMeta: " + metaType, Toast.LENGTH_LONG).show();
-                        upload(bitmap, type);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(CameraActivity.this,
-                                "Failed to label & upload!",
-                                Toast.LENGTH_LONG).show();
-                        Log.e("MYAPP", "exception", e);
-                    }
-                });
-    }
-
-    public void upload(Bitmap bitmap, String type) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0, baos);
-        byte[] data = baos.toByteArray();
-
-        // Define where we will save the image
-        String uniqueImageName = UUID.randomUUID().toString();
-        String savePath = "users/" + UserUID + "/clothes/" + type + "/" + uniqueImageName;
-
-        // Start uploading, and set listeners to treat a successful/failed upload.
-        StorageReference uploadRef = storageRef.child(savePath);
-        UploadTask uploadTask = uploadRef.putBytes(data);
-        final ProgressBar progressBar = CameraActivity.this.findViewById(R.id.uploadProgress);
-        progressBar.setVisibility(View.VISIBLE);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(CameraActivity.this, "Failed to upload image.",
-                        Toast.LENGTH_LONG).show();
-                progressBar.setVisibility(View.GONE);
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(CameraActivity.this, "Upload Successful!",
-                        Toast.LENGTH_LONG).show();
-                progressBar.setVisibility(View.GONE);
-                Intent intent = new Intent(CameraActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
     }
 
     @Override

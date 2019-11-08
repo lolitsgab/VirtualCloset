@@ -12,6 +12,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+
 @SuppressLint("AppCompatCustomView")
 public class DrawableImageView extends ImageView implements View.OnTouchListener {
     private float downx = 0;
@@ -20,7 +26,9 @@ public class DrawableImageView extends ImageView implements View.OnTouchListener
     private float upy = 0;
 
     public Canvas canvas;
+    public Bitmap original_bitmap;
     public Paint paint;
+    public Mat mask;
     private Matrix matrix;
 
     public DrawableImageView(Context context)
@@ -35,8 +43,7 @@ public class DrawableImageView extends ImageView implements View.OnTouchListener
         setOnTouchListener(this);
     }
 
-    public DrawableImageView(Context context, AttributeSet attrs,
-                             int defStyleAttr)
+    public DrawableImageView(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
         setOnTouchListener(this);
@@ -44,20 +51,21 @@ public class DrawableImageView extends ImageView implements View.OnTouchListener
 
     public void setNewImage(Bitmap alteredBitmap, Bitmap bmp)
     {
-        canvas = new Canvas(alteredBitmap );
+        mask = new Mat (bmp.getHeight(), bmp.getWidth(), CvType.CV_8U, new Scalar(Imgproc.GC_PR_BGD));
+        original_bitmap = bmp;
+        canvas = new Canvas(alteredBitmap);
         paint = new Paint();
         paint.setColor(Color.GREEN);
         paint.setStrokeWidth(5);
         matrix = new Matrix();
         canvas.drawBitmap(bmp, matrix, paint);
-
         setImageBitmap(alteredBitmap);
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         int action = event.getAction();
-
+        byte[] buffer = new byte[3];
         switch (action)
         {
             case MotionEvent.ACTION_DOWN:
@@ -68,6 +76,11 @@ public class DrawableImageView extends ImageView implements View.OnTouchListener
                 upx = getPointerCoords(event)[0];//event.getX();
                 upy = getPointerCoords(event)[1];//event.getY();
                 canvas.drawLine(downx, downy, upx, upy, paint);
+                Imgproc.line(mask, new Point(downx, downy), new Point(upx, upy),
+                        new Scalar(
+                                paint.getColor() == Color.parseColor("#1de9b6") ?
+                                        (byte)Imgproc.GC_FGD : (byte)Imgproc.GC_BGD
+                        ), 10);
                 invalidate();
                 downx = upx;
                 downy = upy;
@@ -76,6 +89,11 @@ public class DrawableImageView extends ImageView implements View.OnTouchListener
                 upx = getPointerCoords(event)[0];//event.getX();
                 upy = getPointerCoords(event)[1];//event.getY();
                 canvas.drawLine(downx, downy, upx, upy, paint);
+                Imgproc.line(mask, new Point(downx, downy), new Point(upx, upy),
+                        new Scalar(
+                                paint.getColor() == Color.parseColor("#1de9b6") ?
+                                (byte)Imgproc.GC_FGD : (byte)Imgproc.GC_BGD
+                        ), 10);
                 invalidate();
                 break;
             case MotionEvent.ACTION_CANCEL:
@@ -83,6 +101,16 @@ public class DrawableImageView extends ImageView implements View.OnTouchListener
             default:
                 break;
         }
+
+        // Draw onto mask
+//        if (action == MotionEvent.ACTION_DOWN ||
+//                action == MotionEvent.ACTION_UP ||
+//                action == MotionEvent.ACTION_MOVE) {
+//            buffer[0] = paint.getColor() == Color.parseColor("#1de9b6") ?
+//                    (byte)Imgproc.GC_FGD : (byte)Imgproc.GC_BGD;
+//            mask.put((int)downx, (int)downy, buffer);
+//        }
+
         return true;
     }
 
