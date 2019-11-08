@@ -19,7 +19,6 @@ import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
 
-
 public class MainActivity extends AppCompatActivity {
     String  UserUID;
     Bitmap bm;
@@ -45,6 +44,29 @@ public class MainActivity extends AppCompatActivity {
         UserUID = FirebaseAuth.getInstance().getUid();
 
         // TOP CAROUSEL
+
+
+        // BOTTOM CAROUSEL
+
+
+        // CAMERA ACTIVITY
+        cameraActvivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CameraActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        addTopCarousel();
+        addBottomCarousel();
+    }
+
+    public void addTopCarousel() {
         pathTopReference = storageReference.child("users/" + UserUID +
                 "/clothes/" + "top" + "/");
         pathTopReference.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
@@ -75,8 +97,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
 
-        // BOTTOM CAROUSEL
+    public void addBottomCarousel() {
         pathBottomReference = storageReference.child("users/" + UserUID +
                 "/clothes/" + "bottom" + "/");
         pathBottomReference.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
@@ -104,15 +127,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
 
-            }
-        });
-
-        // CAMERA ACTIVITY
-        cameraActvivityButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CameraActivity.class);
-                startActivity(intent);
             }
         });
     }
