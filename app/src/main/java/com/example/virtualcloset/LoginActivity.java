@@ -33,8 +33,8 @@ public class LoginActivity extends AppCompatActivity {
         progress = this.findViewById(R.id.progress);
         password = this.findViewById(R.id.password);
         email = this.findViewById(R.id.email);
-        login_button = this.findViewById(R.id.login_button);
-        register_account = this.findViewById(R.id.register_account);
+        login_button = this.findViewById(R.id.rectangleLogin);
+        register_account = this.findViewById(R.id.registerAccount);
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
