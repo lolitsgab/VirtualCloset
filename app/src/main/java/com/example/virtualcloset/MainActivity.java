@@ -1,5 +1,6 @@
 package com.example.virtualcloset;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 
@@ -17,6 +18,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.navigation.NavigationView;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+
 import androidx.core.view.GravityCompat;
 
 
@@ -44,6 +48,14 @@ public class MainActivity extends AppCompatActivity {
         nvDrawer = findViewById(R.id.nvView);
         setupDrawerContent(nvDrawer);
 
+        ImageView cameraActvivityButton = this.findViewById(R.id.startCameraActivityButton);
+        cameraActvivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CameraActivity.class);
+                startActivity(intent);
+            }
+        });
 
         final CarouselPicker carouselPicker = (CarouselPicker) findViewById(R.id.carousel);
         CarouselPicker carouselPicker2 =  (CarouselPicker) findViewById(R.id.carousel2);
