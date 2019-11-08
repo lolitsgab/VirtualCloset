@@ -1,194 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@mipmap/background_bg"
+    android:background="@drawable/background"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context=".RegisterActivity"
+    android:theme="@style/AppTheme.NoActionBar">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="45dp"
-            android:adjustViewBounds="true"
-            android:src="@drawable/styline1" />
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="80dp">
-
-            <ImageView
-                android:id="@+id/rectangleEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
-                android:src="@drawable/rectangle2"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="0dp" />
-
-            <EditText
-                android:id="@+id/email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/rectangleEmail"
-                android:layout_alignTop="@id/rectangleEmail"
-                android:layout_alignRight="@id/rectangleEmail"
-                android:layout_alignBottom="@id/rectangleEmail"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="@null"
-                android:hint="Email"
-                android:paddingLeft="10dp"
-                android:textColorHint="@color/colorTransparentWhite"
-                android:textColor="@color/colorWhite"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toBottomOf="@+id/rectangleEmail"
-                app:layout_constraintEnd_toEndOf="@+id/rectangleEmail"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
-                app:layout_constraintTop_toTopOf="@+id/rectangleEmail"
-                app:layout_constraintVertical_bias="0.75" />
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_alignParentLeft="true"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:src="@drawable/mailicon1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/rectangleEmail"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp">
-
-            <ImageView
-                android:id="@+id/rectanglePassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
-                android:src="@drawable/rectangle2"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="0dp" />
-
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:background="@null"
-                android:hint="Password"
-                android:singleLine="true"
-                android:paddingLeft="10dp"
-                android:password="true"
-                android:textColor="@color/colorWhite"
-                android:textColorHint="@color/colorTransparentWhite"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toBottomOf="@+id/rectanglePassword"
-                app:layout_constraintEnd_toEndOf="@+id/rectanglePassword"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
-                app:layout_constraintTop_toTopOf="@+id/rectanglePassword"
-                app:layout_constraintVertical_bias="0.75" />
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_alignParentLeft="true"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:src="@drawable/lockicon1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/rectanglePassword"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="469dp"
+        android:layout_height="214dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="10dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/titleandline"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 
-    </RelativeLayout>
-
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/rectangleEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp">
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/rectangle2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.465" />
 
-        <ImageView
-            android:id="@+id/login_button"
-            android:layout_width="350dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="28dp"
-            android:layout_marginTop="45dp"
-            android:src="@drawable/rectangle4" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/login_button"
-            android:layout_alignTop="@id/login_button"
-            android:layout_alignRight="@id/login_button"
-            android:layout_alignBottom="@id/login_button"
-
-            android:background="@null"
-            android:gravity="center"
-            android:text="@string/login_text"
-            android:textColor="@color/colorTransparentWhite"
-            android:textSize="15dp" />
-    </RelativeLayout>
-
-    <RelativeLayout
+    <EditText
+        android:id="@+id/email"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/rectangleEmail"
+        android:layout_alignTop="@id/rectangleEmail"
+        android:layout_alignRight="@id/rectangleEmail"
+        android:layout_alignBottom="@id/rectangleEmail"
+        android:layout_marginBottom="5dp"
+        android:background="@null"
+        android:drawableLeft="@drawable/mailicon1"
+        android:hint="  Email"
+        android:inputType="textPersonName"
+        android:paddingLeft="10dp"
+        android:textColor="@color/colorWhite"
+        android:textColorHint="@color/colorTransparentWhite"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/rectangleEmail"
+        app:layout_constraintEnd_toEndOf="@+id/rectangleEmail"
+        app:layout_constraintHorizontal_bias="0.031"
+        app:layout_constraintStart_toStartOf="@+id/rectangleEmail"
+        app:layout_constraintTop_toTopOf="@+id/rectangleEmail"
+        app:layout_constraintVertical_bias="0.583" />
 
-        <TextView
-            android:id="@+id/register_account"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="98dp"
-            android:layout_marginTop="60dp"
-            android:clickable="true"
-            android:text="@string/register_account"
-            android:textColor="@color/colorWhite"
-            android:textSize="15dp" />
 
-    </RelativeLayout>
+    <ImageView
+        android:id="@+id/rectanglePassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/rectangle2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.574" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/rectanglePassword"
+        android:layout_alignTop="@id/rectanglePassword"
+        android:layout_alignRight="@id/rectanglePassword"
+        android:layout_alignBottom="@id/rectanglePassword"
+        android:background="@null"
+        android:drawableLeft="@drawable/lockicon1"
+        android:hint="  Password"
+        android:inputType="textPassword"
+        android:paddingLeft="10dp"
+        android:textColor="@color/colorWhite"
+        android:textColorHint="@color/colorTransparentWhite"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/rectanglePassword"
+        app:layout_constraintEnd_toEndOf="@+id/rectanglePassword"
+        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintStart_toStartOf="@+id/rectanglePassword"
+        app:layout_constraintTop_toTopOf="@+id/rectanglePassword" />
+
+
+    <ImageView
+        android:id="@+id/rectangleLogin"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="90dp"
+        android:src="@drawable/peach"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.674" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/rectangleLogin"
+        android:layout_alignTop="@id/rectangleLogin"
+        android:layout_alignRight="@id/rectangleLogin"
+        android:layout_alignBottom="@id/rectangleLogin"
+        android:background="@null"
+        android:gravity="center"
+        android:text="@string/login_text"
+        android:textColor="@color/colorWhite"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/rectangleLogin"
+        app:layout_constraintEnd_toEndOf="@+id/rectangleLogin"
+        app:layout_constraintStart_toStartOf="@+id/rectangleLogin"
+        app:layout_constraintTop_toTopOf="@+id/rectangleLogin" />
+
+    <TextView
+        android:id="@+id/registerAccount"
+        android:layout_width="315dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="205dp"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="@string/register_account"
+        android:textColor="@color/colorWhite"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.726" />
 
     <ProgressBar
         android:id="@+id/progress"
         style="?android:attr/progressBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
         android:indeterminateDrawable="@drawable/progress"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.77" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
