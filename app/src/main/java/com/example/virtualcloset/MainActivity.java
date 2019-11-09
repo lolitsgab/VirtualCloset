@@ -1,5 +1,5 @@
-
 package com.example.virtualcloset;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,22 +13,13 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.navigation.NavigationView;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
+import android.widget.Toast;
 import androidx.core.view.GravityCompat;
-
 import java.util.List;
 import in.goodiebag.carouselpicker.CarouselPicker;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,19 +29,21 @@ import com.google.firebase.storage.StorageReference;
 
 
 public class MainActivity extends AppCompatActivity {
-    String  UserUID;
-    Bitmap bm;
-    List<CarouselPicker.PickerItem> topItems = new ArrayList<>();
-    List<CarouselPicker.PickerItem> bottomItems = new ArrayList<>();
-    StorageReference storageReference, pathTopReference, pathBottomReference;
-    ImageView cameraActvivityButton;
-    FirebaseStorage storage;
-    CarouselPicker topCarousel, bottomCarousel;
-    final long ONE_MEGABYTE = 1024 * 1024;
+    // DEFINED FOR CAROUSEL
+    private String  UserUID;
+    private Bitmap bm;
+    private List<CarouselPicker.PickerItem> topItems = new ArrayList<>();
+    private List<CarouselPicker.PickerItem> bottomItems = new ArrayList<>();
+    private StorageReference storageReference, pathTopReference, pathBottomReference;
+    private FirebaseStorage storage;
+    private CarouselPicker topCarousel, bottomCarousel;
+    private final long ONE_MEGABYTE = 1024 * 1024;
+    //DEFINED FOR CAMERA
+    private ImageView cameraActvivityButton;
+    //DEFINED FOR MENU DRAWER
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
-
     private ActionBarDrawerToggle drawerToggle;
 
     @Override
@@ -66,16 +59,22 @@ public class MainActivity extends AppCompatActivity {
         storageReference = storage.getReference();
         UserUID = FirebaseAuth.getInstance().getUid();
 
+        // MENU SETUP
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         //change later to hamburger (three lines icon)
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         mDrawer = findViewById(R.id.drawer_layout);
         nvDrawer = findViewById(R.id.nvView);
         setupDrawerContent(nvDrawer);
 
+        // ADD CAROUSEL
+        pathTopReference = storageReference.child("users/" + UserUID +
+                "/clothes/" + "top" + "/");
+        pathBottomReference = storageReference.child("users/" + UserUID +
+                "/clothes/" + "bottom" + "/");
+        addCarousel(topItems, pathTopReference, topCarousel);
+        addCarousel(bottomItems, pathBottomReference, bottomCarousel);
 
         // CAMERA ACTIVITY
         cameraActvivityButton.setOnClickListener(new View.OnClickListener() {
@@ -87,50 +86,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        addTopCarousel();
-        addBottomCarousel();
-    }
-
-    public void addTopCarousel() {
-        pathTopReference = storageReference.child("users/" + UserUID +
-                "/clothes/" + "top" + "/");
-        pathTopReference.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
-            @Override
-            public void onSuccess(ListResult listResult) {
-
-                for(StorageReference filteref: listResult.getItems()) {
-                    filteref.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                        @Override
-                        public void onSuccess(byte[] bytes) {
-                            bm = BitmapFactory.decodeByteArray(bytes, 0 , bytes.length);
-                            topItems.add(new CarouselPicker.BitmapItem(bm));
-                            CarouselPicker.CarouselViewAdapter topAdapter = new CarouselPicker.CarouselViewAdapter
-                                    (getApplicationContext(), topItems, 0);
-                            topCarousel.setAdapter(topAdapter);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-
-                        }
-                    });
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-
-            }
-        });
-    }
-
-    public void addBottomCarousel() {
-        pathBottomReference = storageReference.child("users/" + UserUID +
-                "/clothes/" + "bottom" + "/");
-        pathBottomReference.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
+    // ADDS TOP CLOTHING FROM USER STORAGE
+    // AND DISPLAYS IN FIRST CAROUSEL
+    public void addCarousel(final List<CarouselPicker.PickerItem> items, StorageReference ref, final CarouselPicker carousel) {
+        ref.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
             @Override
             public void onSuccess(ListResult listResult) {
                 for(StorageReference filteref: listResult.getItems()) {
@@ -138,15 +97,16 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(byte[] bytes) {
                             bm = BitmapFactory.decodeByteArray(bytes, 0 , bytes.length);
-                            bottomItems.add(new CarouselPicker.BitmapItem(bm));
-                            CarouselPicker.CarouselViewAdapter bottomAdapter = new CarouselPicker.CarouselViewAdapter
-                                    (getApplicationContext(), bottomItems, 0);
-                            bottomCarousel.setAdapter(bottomAdapter);
+                            items.add(new CarouselPicker.BitmapItem(bm));
+                            CarouselPicker.CarouselViewAdapter adapter = new CarouselPicker.CarouselViewAdapter
+                                    (getApplicationContext(), items, 0);
+                            carousel.setAdapter(adapter);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-
+                            Toast.makeText(MainActivity.this, "FAILED DATABASE SYNC",
+                                    Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -154,10 +114,13 @@ public class MainActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-
+                Toast.makeText(MainActivity.this, "NO CLOTHING AVAILABLE TO DISPLAY",
+                        Toast.LENGTH_LONG).show();
             }
         });
     }
+
+    // MENU CONFIGURATION
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
@@ -211,16 +174,3 @@ public class MainActivity extends AppCompatActivity {
         mDrawer.closeDrawers();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
