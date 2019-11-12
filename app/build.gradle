@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -16,11 +15,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-}
-ext {
-    appCompatVersion = '1.0.0'
-    designSupportVersion = '1.0.0'
-    recyclerViewVersion = '1.0.0'
+
     splits {
         abi {
             enable true
@@ -29,6 +24,12 @@ ext {
             universalApk false
         }
     }
+}
+
+ext {
+    appCompatVersion = '1.0.0'
+    designSupportVersion = '1.0.0'
+    recyclerViewVersion = '1.0.0'
 }
 
 dependencies {
