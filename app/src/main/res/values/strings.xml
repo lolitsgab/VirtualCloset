@@ -2,9 +2,6 @@
     <!--SplashActivity-->
     <string name="register_text">REGISTER</string>
 
-    <string name="imagine_text">Imagine the</string>
-    <string name="possibilities_text">possibilities</string>
-
 
     <!--LoginActivity-->
     <string name="app_name">STYLINE</string>

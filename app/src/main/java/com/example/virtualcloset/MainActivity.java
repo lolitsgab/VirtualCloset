@@ -3,6 +3,7 @@ package com.example.virtualcloset;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,13 +20,16 @@ import com.google.android.material.navigation.NavigationView;
 import android.widget.Toast;
 import androidx.core.view.GravityCompat;
 import java.util.List;
-import in.goodiebag.carouselpicker.CarouselPicker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
+
+import org.jetbrains.annotations.NotNull;
+
+import in.goodiebag.carouselpicker.CarouselPicker;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -98,9 +102,11 @@ public class MainActivity extends AppCompatActivity {
                         public void onSuccess(byte[] bytes) {
                             bm = BitmapFactory.decodeByteArray(bytes, 0 , bytes.length);
                             items.add(new CarouselPicker.BitmapItem(bm));
-                            CarouselPicker.CarouselViewAdapter adapter = new CarouselPicker.CarouselViewAdapter
-                                    (getApplicationContext(), items, 0);
+                            CarouselPicker.CarouselViewAdapter adapter =
+                                    new CarouselPicker.CarouselViewAdapter(getApplicationContext(),
+                                            items, 0);
                             carousel.setAdapter(adapter);
+                            carousel.setCurrentItem(adapter.getCount()/2);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -124,10 +130,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawer.openDrawer(GravityCompat.START);
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            mDrawer.openDrawer(GravityCompat.START);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -137,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                    public boolean onNavigationItemSelected(@NotNull MenuItem menuItem) {
                         selectDrawerItem(menuItem);
                         return true;
                     }
@@ -148,13 +153,7 @@ public class MainActivity extends AppCompatActivity {
         // Create a new fragment and specify the fragment to show based on nav item clicked
         Fragment fragment = null;
         Class fragmentClass;
-        switch(menuItem.getItemId()) {
-            case R.id.nav_first_fragment:
-                fragmentClass = TestFragment1.class;
-                break;
-            default:
-                fragmentClass = TestFragment1.class;
-        }
+        fragmentClass = TestFragment1.class;
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
