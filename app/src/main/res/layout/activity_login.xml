@@ -25,11 +25,11 @@
         app:layout_constraintVertical_bias="0.0" />
 
 
-
     <ImageView
         android:id="@+id/rectangleEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:src="@drawable/rectangle2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,11 +62,11 @@
         app:layout_constraintVertical_bias="0.583" />
 
 
-
     <ImageView
         android:id="@+id/rectanglePassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:src="@drawable/rectangle2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -101,6 +101,7 @@
         android:id="@+id/rectangleLogin"
         android:layout_width="350dp"
         android:layout_height="50dp"
+        android:layout_marginTop="90dp"
         android:src="@drawable/peach"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -131,6 +132,7 @@
         android:id="@+id/registerAccount"
         android:layout_width="315dp"
         android:layout_height="30dp"
+        android:layout_marginTop="205dp"
         android:clickable="true"
         android:gravity="center"
         android:text="@string/register_account"
