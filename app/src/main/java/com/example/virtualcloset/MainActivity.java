@@ -1,25 +1,82 @@
 package com.example.virtualcloset;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-
-import in.goodiebag.carouselpicker.CarouselPicker;
-import java.util.List;
 import java.util.ArrayList;
-import androidx.viewpager.widget.ViewPager;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import com.google.android.material.navigation.NavigationView;
+import android.widget.Toast;
+import androidx.core.view.GravityCompat;
+import java.util.List;
+import in.goodiebag.carouselpicker.CarouselPicker;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
+import com.google.firebase.storage.StorageReference;
+
 
 public class MainActivity extends AppCompatActivity {
+    // DEFINED FOR CAROUSEL
+    private String  UserUID;
+    private Bitmap bm;
+    private List<CarouselPicker.PickerItem> topItems = new ArrayList<>();
+    private List<CarouselPicker.PickerItem> bottomItems = new ArrayList<>();
+    private StorageReference storageReference, pathTopReference, pathBottomReference;
+    private FirebaseStorage storage;
+    private CarouselPicker topCarousel, bottomCarousel;
+    private final long ONE_MEGABYTE = 1024 * 1024;
+    //DEFINED FOR CAMERA
+    private ImageView cameraActvivityButton;
+    //DEFINED FOR MENU DRAWER
+    private DrawerLayout mDrawer;
+    private Toolbar toolbar;
+    private NavigationView nvDrawer;
+    private ActionBarDrawerToggle drawerToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        cameraActvivityButton = this.findViewById(R.id.startCameraActivityButton);
+        topCarousel = this.findViewById(R.id.carouselTop);
+        bottomCarousel = this.findViewById(R.id.carouselBottom);
 
-        ImageView cameraActvivityButton = this.findViewById(R.id.startCameraActivityButton);
+        // FIREBASE SETUP
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+        UserUID = FirebaseAuth.getInstance().getUid();
+
+        // MENU SETUP
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        //change later to hamburger (three lines icon)
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mDrawer = findViewById(R.id.drawer_layout);
+        nvDrawer = findViewById(R.id.nvView);
+        setupDrawerContent(nvDrawer);
+
+        // ADD CAROUSEL
+        pathTopReference = storageReference.child("users/" + UserUID +
+                "/clothes/" + "top" + "/");
+        pathBottomReference = storageReference.child("users/" + UserUID +
+                "/clothes/" + "bottom" + "/");
+        addCarousel(topItems, pathTopReference, topCarousel);
+        addCarousel(bottomItems, pathBottomReference, bottomCarousel);
+
+        // CAMERA ACTIVITY
         cameraActvivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -27,46 +84,93 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        final CarouselPicker carouselPicker = (CarouselPicker) findViewById(R.id.carousel);
-        CarouselPicker carouselPicker2 =  (CarouselPicker) findViewById(R.id.carousel2);
+    }
 
-        // Case 1 : To populate the picker with images
-        final List<CarouselPicker.PickerItem> shirts = new ArrayList<>();
-        shirts.add(new CarouselPicker.DrawableItem(R.drawable.striped_guess));
-        shirts.add(new CarouselPicker.DrawableItem(R.drawable.carhart_shirt));
-        shirts.add(new CarouselPicker.DrawableItem(R.drawable.stussy_crewneck));
-
-        final List<CarouselPicker.PickerItem> bottoms = new ArrayList<>();
-        bottoms.add(new CarouselPicker.DrawableItem(R.drawable.jeans));
-        bottoms.add(new CarouselPicker.DrawableItem(R.drawable.black_jeans));
-        bottoms.add(new CarouselPicker.DrawableItem(R.drawable.striped_pants));
-        
-        //Create an adapter
-        CarouselPicker.CarouselViewAdapter imageAdapter = new CarouselPicker.CarouselViewAdapter(this, shirts, 0);
-        CarouselPicker.CarouselViewAdapter imageAdapter2 = new CarouselPicker.CarouselViewAdapter(this, bottoms, 0);
-        
-        //Set the adapter
-        carouselPicker.setAdapter(imageAdapter);
-        carouselPicker2.setAdapter(imageAdapter2);
-
-
-        carouselPicker.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
+    // ADDS TOP CLOTHING FROM USER STORAGE
+    // AND DISPLAYS IN FIRST CAROUSEL
+    public void addCarousel(final List<CarouselPicker.PickerItem> items, StorageReference ref, final CarouselPicker carousel) {
+        ref.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+            public void onSuccess(ListResult listResult) {
+                for(StorageReference filteref: listResult.getItems()) {
+                    filteref.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            bm = BitmapFactory.decodeByteArray(bytes, 0 , bytes.length);
+                            items.add(new CarouselPicker.BitmapItem(bm));
+                            CarouselPicker.CarouselViewAdapter adapter = new CarouselPicker.CarouselViewAdapter
+                                    (getApplicationContext(), items, 0);
+                            carousel.setAdapter(adapter);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(MainActivity.this, "FAILED DATABASE SYNC",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
             }
-
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onPageSelected(int position) {
-
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MainActivity.this, "NO CLOTHING AVAILABLE TO DISPLAY",
+                        Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    // MENU CONFIGURATION
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // The action bar home/up action should open or close the drawer.
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawer.openDrawer(GravityCompat.START);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        selectDrawerItem(menuItem);
+                        return true;
+                    }
+                });
+    }
+
+    public void selectDrawerItem(MenuItem menuItem) {
+        // Create a new fragment and specify the fragment to show based on nav item clicked
+        Fragment fragment = null;
+        Class fragmentClass;
+        switch(menuItem.getItemId()) {
+            case R.id.nav_first_fragment:
+                fragmentClass = TestFragment1.class;
+                break;
+            default:
+                fragmentClass = TestFragment1.class;
+        }
+
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Insert the fragment by replacing any existing fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+        // Highlight the selected item has been done by NavigationView
+        menuItem.setChecked(true);
+        // Set action bar title
+        setTitle(menuItem.getTitle());
+        // Close the navigation drawer
+        mDrawer.closeDrawers();
     }
 }

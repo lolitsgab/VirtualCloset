@@ -10,7 +10,6 @@
     android:theme="@style/AppTheme.NoActionBar">
 
     <ImageView
-        android:id="@+id/imageView5"
         android:layout_width="469dp"
         android:layout_height="214dp"
         android:layout_alignParentTop="true"
@@ -117,6 +116,7 @@
         android:layout_alignRight="@id/rectanglePassword"
         android:layout_alignBottom="@id/rectanglePassword"
         android:background="@null"
+        android:password="true"
         android:drawableLeft="@drawable/lockicon1"
         android:hint="  Password"
         android:inputType="textPersonName"
@@ -152,6 +152,7 @@
         android:layout_alignBottom="@id/rectangleConfirmPassword"
         android:layout_marginBottom="12dp"
         android:background="@null"
+        android:password="true"
         android:drawableLeft="@drawable/lockicon1"
         android:hint="  Confirm Password"
         android:inputType="textPersonName"
