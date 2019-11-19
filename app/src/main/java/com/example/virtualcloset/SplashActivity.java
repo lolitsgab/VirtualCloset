@@ -14,7 +14,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
-            startActivity(new Intent(this, MainActivity.class));
+          startActivity(new Intent(this, MainActivity.class));
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
