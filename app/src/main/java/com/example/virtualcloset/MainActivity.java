@@ -26,7 +26,6 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.navigation.NavigationView;
 import android.widget.Toast;
 import androidx.core.view.GravityCompat;
-import androidx.viewpager.widget.ViewPager;
 
 import java.util.List;
 import com.google.android.gms.tasks.OnFailureListener;

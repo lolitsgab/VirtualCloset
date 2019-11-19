@@ -23,6 +23,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +38,7 @@ public class CarouselPicker extends ViewPager {
     private int itemsVisible = 3;
     private float divisor;
     public Context mainContext;
+
 
     public CarouselPicker(Context context) {
         this(context, null);
@@ -122,7 +127,7 @@ public class CarouselPicker extends ViewPager {
         
 
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public Object instantiateItem(ViewGroup container, final int position) {
             View view = LayoutInflater.from(context).inflate(this.drawable, null);
             ImageView iv = (ImageView) view.findViewById(R.id.iv);
             PickerItem pickerItem = items.get(position);
@@ -142,9 +147,16 @@ public class CarouselPicker extends ViewPager {
 
 
 
+
             iv.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                    String user = FirebaseAuth.getInstance().getUid();
+                    final DatabaseReference db = firebaseDatabase.getReference("users/" + user +
+                            "/clothes/");
+
+
                     // debug
                     final AlertDialog.Builder alert = new AlertDialog.Builder(context);
                     View mView = LayoutInflater.from(context).inflate(R.layout.custom_dialog, null);
@@ -158,7 +170,12 @@ public class CarouselPicker extends ViewPager {
                     save_button.setOnClickListener( new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            db.child(names.get(position)).setValue("title", title_popup.getText().toString());
+                            db.child(names.get(position)).setValue("bought",bought_popup.getText().toString());
+                            db.child(names.get(position)).setValue("tags", tags_popup.getText().toString());
 
+                            //saving
+                            //append to path
                         }
                     });
                     alert.show();
