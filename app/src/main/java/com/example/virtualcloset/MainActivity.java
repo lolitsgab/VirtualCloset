@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
 
+    private List<String> shirtNames;
+    private List<String> pantsNames;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +61,19 @@ public class MainActivity extends AppCompatActivity {
         cameraActvivityButton = this.findViewById(R.id.startCameraActivityButton);
         topCarousel = this.findViewById(R.id.carouselTop);
         bottomCarousel = this.findViewById(R.id.carouselBottom);
+
+        //STAR FUNCTION
+        shirtNames = new ArrayList<>();
+        pantsNames = new ArrayList<>();
+        ImageView starButton = findViewById(R.id.star);
+        starButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String str = shirtNames.get(topCarousel.getCurrentItem());
+                Toast.makeText(MainActivity.this, "Name of shirt: " + str, Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
         // FIREBASE SETUP
         storage = FirebaseStorage.getInstance();
@@ -77,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
                 "/clothes/" + "top" + "/");
         pathBottomReference = storageReference.child("users/" + UserUID +
                 "/clothes/" + "bottom" + "/");
-        addCarousel(topItems, pathTopReference, topCarousel);
-        addCarousel(bottomItems, pathBottomReference, bottomCarousel);
+        addCarousel(topItems, shirtNames, pathTopReference, topCarousel);
+        addCarousel(bottomItems, pantsNames, pathBottomReference, bottomCarousel);
 
         // CAMERA ACTIVITY
         cameraActvivityButton.setOnClickListener(new View.OnClickListener() {
@@ -92,11 +109,13 @@ public class MainActivity extends AppCompatActivity {
 
     // ADDS TOP CLOTHING FROM USER STORAGE
     // AND DISPLAYS IN FIRST CAROUSEL
-    public void addCarousel(final List<CarouselPicker.PickerItem> items, StorageReference ref, final CarouselPicker carousel) {
+    public void addCarousel(final List<CarouselPicker.PickerItem> items, final List<String> itemNames, StorageReference ref, final CarouselPicker carousel) {
+        //final List<String> names = new ArrayList<>();
         ref.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
             @Override
             public void onSuccess(ListResult listResult) {
                 for(StorageReference filteref: listResult.getItems()) {
+                    itemNames.add(filteref.getName());
                     filteref.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                         @Override
                         public void onSuccess(byte[] bytes) {
@@ -104,8 +123,9 @@ public class MainActivity extends AppCompatActivity {
                             items.add(new CarouselPicker.BitmapItem(bm));
                             CarouselPicker.CarouselViewAdapter adapter =
                                     new CarouselPicker.CarouselViewAdapter(getApplicationContext(),
-                                            items, 0);
+                                            items, itemNames,0);
                             carousel.setAdapter(adapter);
+
                             carousel.setCurrentItem(adapter.getCount()/2);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -133,6 +153,10 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             mDrawer.openDrawer(GravityCompat.START);
             return true;
+        }else if(item.getItemId() == R.id.nav_first_fragment){
+            selectDrawerItem(item);
+        }else{
+            return false;
         }
 
         return super.onOptionsItemSelected(item);
@@ -154,6 +178,15 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = null;
         Class fragmentClass;
         fragmentClass = TestFragment1.class;
+
+        switch(menuItem.getItemId()) {
+            case R.id.nav_first_fragment:
+                fragmentClass = TestFragment1.class;
+                break;
+
+            default:
+                fragmentClass = TestFragment1.class;
+        }
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
