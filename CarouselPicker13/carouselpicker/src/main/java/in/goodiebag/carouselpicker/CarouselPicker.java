@@ -1,5 +1,6 @@
 package in.goodiebag.carouselpicker;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -15,8 +16,12 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +33,7 @@ import java.util.List;
 public class CarouselPicker extends ViewPager {
     private int itemsVisible = 3;
     private float divisor;
+    public Context mainContext;
 
     public CarouselPicker(Context context) {
         this(context, null);
@@ -129,6 +135,32 @@ public class CarouselPicker extends ViewPager {
                     iv.setVisibility(GONE);
                 }
             }
+
+
+
+            iv.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // debug
+                    final AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    View mView = LayoutInflater.from(context).inflate(R.layout.custom_dialog, null);
+                    final EditText title_popup = mView.findViewById(R.id.title_popup);
+                    final EditText bought_popup = mView.findViewById(R.id.bought_popup);
+                    final EditText tags_popup = mView.findViewById(R.id.tags_popup);
+                    Button save_button = mView.findViewById(R.id.save_button);
+                    alert.setView(mView);
+                    final AlertDialog alertDialog = alert.create();
+                    alertDialog.setCanceledOnTouchOutside(true);
+                    save_button.setOnClickListener( new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });
+                    alert.show();
+                }
+            });
+
             view.setTag(position);
             container.addView(view);
             return view;
@@ -232,6 +264,7 @@ public class CarouselPicker extends ViewPager {
             return bit;
         }
 
+
         @DrawableRes
         public int getDrawable() {
             return 0;
@@ -269,6 +302,4 @@ public class CarouselPicker extends ViewPager {
             return null;
         }
     }
-
-
 }
