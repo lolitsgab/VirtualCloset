@@ -97,14 +97,16 @@ public class CarouselPicker extends ViewPager {
     public static class CarouselViewAdapter extends PagerAdapter {
 
         List<PickerItem> items = new ArrayList<>();
+        public List<String> names = new ArrayList<>();
         Context context;
         ImageView imageView;
         int drawable;
         int textColor = 0;
 
-        public CarouselViewAdapter(Context context, List<PickerItem> items, int drawable) {
+        public CarouselViewAdapter(Context context, List<PickerItem> items, List<String> names, int drawable) {
             this.context = context;
             this.items = items;
+            this.names = names;
             this.imageView = imageView;
             if (this.drawable == 0) {
                 this.drawable = R.layout.page;
@@ -116,6 +118,8 @@ public class CarouselPicker extends ViewPager {
         public int getCount() {
             return items.size();
         }
+
+        
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
