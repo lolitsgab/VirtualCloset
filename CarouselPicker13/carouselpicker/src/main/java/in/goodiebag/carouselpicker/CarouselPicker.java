@@ -10,6 +10,8 @@ import androidx.annotation.DrawableRes;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -146,8 +148,6 @@ public class CarouselPicker extends ViewPager {
             }
 
 
-
-
             iv.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -160,22 +160,24 @@ public class CarouselPicker extends ViewPager {
                     // debug
                     final AlertDialog.Builder alert = new AlertDialog.Builder(context);
                     View mView = LayoutInflater.from(context).inflate(R.layout.custom_dialog, null);
+                    final TextView clothing_info = mView.findViewById(R.id.clothing_info);
                     final EditText title_popup = mView.findViewById(R.id.title_popup);
                     final EditText bought_popup = mView.findViewById(R.id.bought_popup);
                     final EditText tags_popup = mView.findViewById(R.id.tags_popup);
                     Button save_button = mView.findViewById(R.id.save_button);
                     alert.setView(mView);
                     final AlertDialog alertDialog = alert.create();
+                    alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     alertDialog.setCanceledOnTouchOutside(true);
                     save_button.setOnClickListener( new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            db.child(names.get(position)).setValue("title", title_popup.getText().toString());
-                            db.child(names.get(position)).setValue("bought",bought_popup.getText().toString());
-                            db.child(names.get(position)).setValue("tags", tags_popup.getText().toString());
-
-                            //saving
-                            //append to path
+                            db.child(names.get(position)).child("title").
+                            setValue(title_popup.getText().toString());
+                            db.child(names.get(position)).child("bought").
+                                    setValue(bought_popup.getText().toString());
+                            db.child(names.get(position)).child("tags").
+                                    setValue(tags_popup.getText().toString());
                         }
                     });
                     alert.show();

@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                             items.add(new CarouselPicker.BitmapItem(bm));
                             CarouselPicker.CarouselViewAdapter adapter =
 
-                                    new CarouselPicker.CarouselViewAdapter(getApplicationContext(),
+                                    new CarouselPicker.CarouselViewAdapter(MainActivity.this,
                                             items, itemNames,0);
                             carousel.setAdapter(adapter);
 
