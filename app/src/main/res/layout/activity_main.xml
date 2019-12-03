@@ -26,7 +26,10 @@
             android:id="@+id/flContent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
+
+
+        </FrameLayout>
     </LinearLayout>
 
 
@@ -87,6 +90,8 @@
             android:focusableInTouchMode="true"
             app:items_visible="three"
             app:layout_constraintBottom_toTopOf="@+id/cameraCircle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/stylineTitle" />
 
         <ImageView
@@ -184,7 +189,6 @@
             app:layout_constraintStart_toEndOf="@+id/cameraCircle"
             app:layout_constraintTop_toTopOf="@+id/whiteBar"
             app:layout_constraintVertical_bias="0.411" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- The navigation drawer that comes from the left -->
