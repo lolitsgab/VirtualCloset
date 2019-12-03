@@ -24,6 +24,7 @@ android {
             universalApk false
         }
     }
+    buildToolsVersion = '28.0.3'
 }
 
 ext {
@@ -33,14 +34,14 @@ ext {
 }
 
 dependencies {
-    implementation 'com.google.firebase:firebase-analytics:17.2.0'
+    implementation 'com.google.firebase:firebase-analytics:17.2.1'
     implementation 'com.google.firebase:firebase-auth:19.1.0'
     implementation 'com.google.firebase:firebase-storage:19.1.0'
     implementation 'com.google.android.gms:play-services-gcm:17.0.0'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'com.google.firebase:firebase-ml-vision:24.0.0'
+    implementation 'com.google.firebase:firebase-ml-vision:24.0.1'
     implementation 'com.google.firebase:firebase-ml-vision-image-label-model:19.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
@@ -48,9 +49,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:19.2.0'
     implementation 'com.camerakit:camerakit:1.0.0-beta3.11'
     implementation 'com.camerakit:jpegkit:0.1.0'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.31'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.50'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.0'
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation project(path: ':openCVLibrary343')
 
     // Drawer and toolbar

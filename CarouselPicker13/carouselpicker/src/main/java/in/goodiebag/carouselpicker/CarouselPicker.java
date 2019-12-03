@@ -1,5 +1,6 @@
 package in.goodiebag.carouselpicker;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -9,14 +10,24 @@ import androidx.annotation.DrawableRes;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +39,8 @@ import java.util.List;
 public class CarouselPicker extends ViewPager {
     private int itemsVisible = 3;
     private float divisor;
+    public Context mainContext;
+
 
     public CarouselPicker(Context context) {
         this(context, null);
@@ -113,8 +126,10 @@ public class CarouselPicker extends ViewPager {
             return items.size();
         }
 
+        
+
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public Object instantiateItem(ViewGroup container, final int position) {
             View view = LayoutInflater.from(context).inflate(this.drawable, null);
             ImageView iv = (ImageView) view.findViewById(R.id.iv);
             PickerItem pickerItem = items.get(position);
@@ -131,6 +146,44 @@ public class CarouselPicker extends ViewPager {
                     iv.setVisibility(GONE);
                 }
             }
+
+
+            iv.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                    String user = FirebaseAuth.getInstance().getUid();
+                    final DatabaseReference db = firebaseDatabase.getReference("users/" + user +
+                            "/clothes/");
+
+
+                    // debug
+                    final AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    View mView = LayoutInflater.from(context).inflate(R.layout.custom_dialog, null);
+                    final TextView clothing_info = mView.findViewById(R.id.clothing_info);
+                    final EditText title_popup = mView.findViewById(R.id.title_popup);
+                    final EditText bought_popup = mView.findViewById(R.id.bought_popup);
+                    final EditText tags_popup = mView.findViewById(R.id.tags_popup);
+                    Button save_button = mView.findViewById(R.id.save_button);
+                    alert.setView(mView);
+                    final AlertDialog alertDialog = alert.create();
+                    alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    alertDialog.setCanceledOnTouchOutside(true);
+                    save_button.setOnClickListener( new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            db.child(names.get(position)).child("title").
+                            setValue(title_popup.getText().toString());
+                            db.child(names.get(position)).child("bought").
+                                    setValue(bought_popup.getText().toString());
+                            db.child(names.get(position)).child("tags").
+                                    setValue(tags_popup.getText().toString());
+                        }
+                    });
+                    alert.show();
+                }
+            });
+
             view.setTag(position);
             container.addView(view);
             return view;
@@ -234,6 +287,7 @@ public class CarouselPicker extends ViewPager {
             return bit;
         }
 
+
         @DrawableRes
         public int getDrawable() {
             return 0;
@@ -271,6 +325,4 @@ public class CarouselPicker extends ViewPager {
             return null;
         }
     }
-
-
 }

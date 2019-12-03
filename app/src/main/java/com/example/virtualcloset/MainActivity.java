@@ -1,14 +1,20 @@
 package com.example.virtualcloset;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.media.Image;
+
 import android.os.Bundle;
+
 import android.view.MenuItem;
 import android.view.View;
+
 import android.widget.ImageView;
 
 import java.lang.reflect.Array;
@@ -28,6 +34,7 @@ import androidx.viewpager.widget.ViewPager;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -150,6 +157,8 @@ public class MainActivity extends AppCompatActivity {
                 String starPair = shirt + "," + pants;
                 starred.add(starPair);
                 db.child("Starred").setValue(starred);
+              
+                String str = shirtNames.get(topCarousel.getCurrentItem());
 
 
             }
@@ -176,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
                 "/clothes/" + "bottom" + "/");
         addCarousel(topItems, shirtNames, pathTopReference, topCarousel);
         addCarousel(bottomItems, pantsNames, pathBottomReference, bottomCarousel);
+
 
         // CAMERA ACTIVITY
         cameraActvivityButton.setOnClickListener(new View.OnClickListener() {
@@ -250,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
         ref.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
             @Override
             public void onSuccess(ListResult listResult) {
+
                 for(StorageReference filteref: listResult.getItems()) {
                     itemNames.add(filteref.getName());
                     filteref.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
@@ -258,11 +269,13 @@ public class MainActivity extends AppCompatActivity {
                             bm = BitmapFactory.decodeByteArray(bytes, 0 , bytes.length);
                             items.add(new CarouselPicker.BitmapItem(bm));
                             CarouselPicker.CarouselViewAdapter adapter =
-                                    new CarouselPicker.CarouselViewAdapter(getApplicationContext(),
+
+                                    new CarouselPicker.CarouselViewAdapter(MainActivity.this,
                                             items, itemNames,0);
                             carousel.setAdapter(adapter);
 
                             carousel.setCurrentItem(adapter.getCount()/2);
+
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -273,6 +286,7 @@ public class MainActivity extends AppCompatActivity {
                     });
                 }
             }
+
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
@@ -280,6 +294,16 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
             }
         });
+
+    }
+
+
+
+
+
+
+    public void showDialog(View theView){
+
     }
 
     // MENU CONFIGURATION
