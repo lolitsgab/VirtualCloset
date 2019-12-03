@@ -7,4 +7,6 @@
     <color name="colorTransparentWhite">#E2E2E2</color>
     <color name="FG_MODE">#1de9b6</color>
     <color name="BG_MODE">#c62828</color>
+    <color name="colorLightGray">#D8D8D8</color>
+    <color name="colorMainOrange">#FFC1AA</color>
 </resources>
