@@ -1,14 +1,19 @@
 package com.example.virtualcloset;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import java.lang.reflect.Array;
@@ -313,10 +318,10 @@ public class MainActivity extends AppCompatActivity {
                             selectDrawerItem(menuItem);
                             return true;
                         }else if(menuItem.getItemId() == R.id.nav_second_fragment){
-                            Toast.makeText(MainActivity.this, "SEARCH", Toast.LENGTH_SHORT).show();
+                            selectDrawerItem(menuItem);
                             return true;
                         }else if(menuItem.getItemId() == R.id.nav_third_fragment){
-                            Toast.makeText(MainActivity.this, "SETTINGS", Toast.LENGTH_SHORT).show();
+                            selectDrawerItem(menuItem);
                             return true;
                         }else
                             return true;
@@ -329,26 +334,70 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = null;
         Class fragmentClass;
         fragmentClass = TestFragment1.class;
+        TextView text;
+        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        View mView = LayoutInflater.from(this).inflate(R.layout.menu_dialog, null);
+        final AlertDialog alertDialog = alert.create();
 
-        switch(menuItem.getItemId()) {
+        switch (menuItem.getItemId()) {
             case R.id.nav_first_fragment:
-                Toast.makeText(this, "FIRST FRAGMENT", Toast.LENGTH_SHORT).show();
                 fragmentClass = TestFragment1.class;
+
+                text = mView.findViewById(R.id.text_popup);
+                text.setText("Navigating to your closet...");
+                alert.setView(mView);
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                alertDialog.setCanceledOnTouchOutside(true);
+                alert.show();
+                break;
+
+            case R.id.nav_second_fragment:
+
+                fragmentClass = TestFragment1.class;
+
+                text = mView.findViewById(R.id.text_popup);
+                text.setText("Navigating to search...");
+                alert.setView(mView);
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                alertDialog.setCanceledOnTouchOutside(true);
+                alert.show();
+                break;
+
+            case R.id.nav_third_fragment:
+                fragmentClass = TestFragment1.class;
+
+                text = mView.findViewById(R.id.text_popup);
+                text.setText("Navigating to settings...");
+                alert.setView(mView);
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                alertDialog.setCanceledOnTouchOutside(true);
+                alert.show();
                 break;
 
             default:
                 fragmentClass = TestFragment1.class;
+                text = mView.findViewById(R.id.text_popup);
+                text.setText("Navigating ...");
+                alert.setView(mView);
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                alertDialog.setCanceledOnTouchOutside(true);
+                alert.show();
+                break;
+
         }
 
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+//        try {
+//            fragment = (Fragment) fragmentClass.newInstance();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//
+//        // Insert the fragment by replacing any existing fragment
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         // Highlight the selected item has been done by NavigationView
         menuItem.setChecked(true);
@@ -361,5 +410,6 @@ public class MainActivity extends AppCompatActivity {
     public void onDrawerClicked(View v){
         mDrawer.openDrawer(GravityCompat.START);
     }
+
 
 }
