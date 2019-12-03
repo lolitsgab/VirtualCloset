@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.media.Image;
 
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import android.widget.ImageView;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -26,11 +29,21 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.navigation.NavigationView;
 import android.widget.Toast;
 import androidx.core.view.GravityCompat;
+import androidx.viewpager.widget.ViewPager;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
@@ -60,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
 
     private List<String> shirtNames;
     private List<String> pantsNames;
+    private ArrayList<String> starred;
+    public ImageView starIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,16 +84,82 @@ public class MainActivity extends AppCompatActivity {
         topCarousel = this.findViewById(R.id.carouselTop);
         bottomCarousel = this.findViewById(R.id.carouselBottom);
 
+
         //STAR FUNCTION
+        starred = new ArrayList<>();
+        //set up database
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        String user = FirebaseAuth.getInstance().getUid();
+        final DatabaseReference db = firebaseDatabase.getReference("users/" + user +
+                "/clothes/");
+        db.child("Starred");
+
+        //create new list of starred, else download from database
+
+            db.child("Starred").addListenerForSingleValueEvent(new ValueEventListener(){
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {
+                    };
+                    ArrayList<String> temp = dataSnapshot.getValue(t);
+                    starred.clear();
+
+                    if(temp!= null)
+                        starred = temp;
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+
+        starIcon = findViewById(R.id.star);
+        ImageView starButton = findViewById(R.id.star);
         shirtNames = new ArrayList<>();
         pantsNames = new ArrayList<>();
-        ImageView starButton = findViewById(R.id.star);
+
+        //click listener for star button
         starButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //get current shirt and pants names
+                String shirt = shirtNames.get(topCarousel.getCurrentItem());
+                String pants = pantsNames.get(bottomCarousel.getCurrentItem());
 
+
+                //download from database when new info is added
+                db.child("Starred").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {
+                        };
+                        ArrayList<String> temp = dataSnapshot.getValue(t);
+                        starred.clear();
+
+                        if(temp!=null)
+                            starred = temp;
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                //change image color when clicked
+                starIcon.setImageDrawable(getResources().getDrawable(R.drawable.star_icon_filled));
+
+                //upload to database
+                String starPair = shirt + "," + pants;
+                starred.add(starPair);
+                db.child("Starred").setValue(starred);
+              
                 String str = shirtNames.get(topCarousel.getCurrentItem());
-                Toast.makeText(MainActivity.this, "Name of shirt: " + str, Toast.LENGTH_SHORT).show();
+
 
             }
         });
@@ -115,7 +196,61 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        topCarousel.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                try {
+                    String current = shirtNames.get(position) + "," + pantsNames.get(bottomCarousel.getCurrentItem());
+                    if (starred.contains(current)) {
+                        starIcon.setImageDrawable(getResources().getDrawable(R.drawable.star_icon_filled));
+
+                    } else {
+                        starIcon.setImageDrawable(getResources().getDrawable(R.drawable.star));
+
+                    }
+                }catch(Exception e){
+
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        bottomCarousel.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                try {
+                    String current = shirtNames.get(topCarousel.getCurrentItem()) + "," + pantsNames.get(position);
+                    if (starred.contains(current)) {
+                        starIcon.setImageDrawable(getResources().getDrawable(R.drawable.star_icon_filled));
+                    } else {
+                        starIcon.setImageDrawable(getResources().getDrawable(R.drawable.star));
+                    }
+                }catch(Exception e){
+
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     // ADDS TOP CLOTHING FROM USER STORAGE
