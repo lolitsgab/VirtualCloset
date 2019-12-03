@@ -125,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
         ref.listAll().addOnSuccessListener(new OnSuccessListener<ListResult>() {
             @Override
             public void onSuccess(ListResult listResult) {
-
                 for(StorageReference filteref: listResult.getItems()) {
                     itemNames.add(filteref.getName());
                     filteref.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {

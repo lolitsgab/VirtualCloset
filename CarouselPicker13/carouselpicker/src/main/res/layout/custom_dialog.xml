@@ -22,7 +22,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/title_popup"
+        android:id="@+id/brand_popup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="10dp"
@@ -31,13 +31,13 @@
         android:hint="BRAND" />
 
     <EditText
-        android:id="@+id/bought_popup"
+        android:id="@+id/type_popup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textSize="10dp"
         android:backgroundTint="#F2A39C"
-        android:hint="STORE" />
+        android:hint="TYPE" />
 
     <EditText
         android:id="@+id/tags_popup"

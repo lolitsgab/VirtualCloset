@@ -30,7 +30,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * Created by pavan on 25/04/17.
@@ -155,14 +157,13 @@ public class CarouselPicker extends ViewPager {
                     String user = FirebaseAuth.getInstance().getUid();
                     final DatabaseReference db = firebaseDatabase.getReference("users/" + user +
                             "/clothes/");
-
-
+                    final HashMap<String, String> tagged = new HashMap<>();
                     // debug
                     final AlertDialog.Builder alert = new AlertDialog.Builder(context);
                     View mView = LayoutInflater.from(context).inflate(R.layout.custom_dialog, null);
                     final TextView clothing_info = mView.findViewById(R.id.clothing_info);
-                    final EditText title_popup = mView.findViewById(R.id.title_popup);
-                    final EditText bought_popup = mView.findViewById(R.id.bought_popup);
+                    final EditText brand_popup = mView.findViewById(R.id.brand_popup);
+                    final EditText type_popup = mView.findViewById(R.id.type_popup);
                     final EditText tags_popup = mView.findViewById(R.id.tags_popup);
                     Button save_button = mView.findViewById(R.id.save_button);
                     alert.setView(mView);
@@ -173,11 +174,16 @@ public class CarouselPicker extends ViewPager {
                         @Override
                         public void onClick(View view) {
                             db.child(names.get(position)).child("title").
-                            setValue(title_popup.getText().toString());
+                            setValue(brand_popup.getText().toString());
                             db.child(names.get(position)).child("bought").
-                                    setValue(bought_popup.getText().toString());
-                            db.child(names.get(position)).child("tags").
-                                    setValue(tags_popup.getText().toString());
+                                    setValue(type_popup.getText().toString());
+                            StringTokenizer tokenizer = new StringTokenizer(tags_popup.getText().toString(), "\\s*,\\s*");
+                            int i = 0;
+                            while(tokenizer.hasMoreTokens()) {
+                                tagged.put(String.valueOf(i), tokenizer.nextToken().trim());
+                                i++;
+                            }
+                            db.child(names.get(position)).child("tags").setValue(tagged);
                         }
                     });
                     alert.show();
