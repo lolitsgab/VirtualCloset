@@ -32,17 +32,7 @@
         </FrameLayout>
     </LinearLayout>
 
-    <!-- The navigation drawer that comes from the left -->
-    <!-- Note that `android:layout_gravity` needs to be set to 'start' -->
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nvView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="#FFC1AA"
-        app:menu="@menu/drawer_view"
-        app:itemTextColor="@color/colorWhite"
-        app:headerLayout="@layout/nav_header"/>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -114,7 +104,8 @@
             app:layout_constraintHorizontal_bias="0.38"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.615" />
+            app:layout_constraintVertical_bias="0.615"
+            android:onClick="onDrawerClicked"/>
 
         <ImageView
             android:id="@+id/search"
@@ -198,13 +189,19 @@
             app:layout_constraintStart_toEndOf="@+id/cameraCircle"
             app:layout_constraintTop_toTopOf="@+id/whiteBar"
             app:layout_constraintVertical_bias="0.411" />
-
-        <fragment
-            android:name="com.example.virtualcloset.TestFragment1"
-            android:id="@+id/fooFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- The navigation drawer that comes from the left -->
+    <!-- Note that `android:layout_gravity` needs to be set to 'start' -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nvView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#FFC1AA"
+        app:menu="@menu/drawer_view"
+        app:itemTextColor="@color/colorWhite"
+        app:headerLayout="@layout/nav_header"/>
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
