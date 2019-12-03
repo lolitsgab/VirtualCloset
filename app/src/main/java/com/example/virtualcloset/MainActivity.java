@@ -21,6 +21,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.navigation.NavigationView;
+
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.core.view.GravityCompat;
 import androidx.viewpager.widget.ViewPager;
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> starred;
     public ImageView starIcon;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
                 "/clothes/");
         db.child("Starred");
 
-        //create new list of starred, else download from database
 
             db.child("Starred").addListenerForSingleValueEvent(new ValueEventListener(){
                 @Override
@@ -168,6 +170,8 @@ public class MainActivity extends AppCompatActivity {
         mDrawer = findViewById(R.id.drawer_layout);
         nvDrawer = findViewById(R.id.nvView);
         setupDrawerContent(nvDrawer);
+
+
 
         // ADD CAROUSEL
         pathTopReference = storageReference.child("users/" + UserUID +
@@ -286,13 +290,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // The action bar home/up action should open or close the drawer.
-        if (item.getItemId() == android.R.id.home) {
-            mDrawer.openDrawer(GravityCompat.START);
-            return true;
-        }else if(item.getItemId() == R.id.nav_first_fragment){
+//        if (item.getItemId() == android.R.id.home) {
+//            mDrawer.openDrawer(GravityCompat.START);
+//            return true;
+//        }
+        if(item.getItemId() == R.id.nav_first_fragment){
+            Toast.makeText(this, "FIRST FRAGMENT1", Toast.LENGTH_SHORT).show();
             selectDrawerItem(item);
-        }else{
-            return false;
         }
 
         return super.onOptionsItemSelected(item);
@@ -303,8 +307,19 @@ public class MainActivity extends AppCompatActivity {
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NotNull MenuItem menuItem) {
-                        selectDrawerItem(menuItem);
-                        return true;
+                        //selectDrawerItem(menuItem);
+                        if(menuItem.getItemId() == R.id.nav_first_fragment){
+                            //Toast.makeText(MainActivity.this, "CLOSET", Toast.LENGTH_SHORT).show();
+                            selectDrawerItem(menuItem);
+                            return true;
+                        }else if(menuItem.getItemId() == R.id.nav_second_fragment){
+                            Toast.makeText(MainActivity.this, "SEARCH", Toast.LENGTH_SHORT).show();
+                            return true;
+                        }else if(menuItem.getItemId() == R.id.nav_third_fragment){
+                            Toast.makeText(MainActivity.this, "SETTINGS", Toast.LENGTH_SHORT).show();
+                            return true;
+                        }else
+                            return true;
                     }
                 });
     }
@@ -317,6 +332,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch(menuItem.getItemId()) {
             case R.id.nav_first_fragment:
+                Toast.makeText(this, "FIRST FRAGMENT", Toast.LENGTH_SHORT).show();
                 fragmentClass = TestFragment1.class;
                 break;
 
@@ -341,4 +357,9 @@ public class MainActivity extends AppCompatActivity {
         // Close the navigation drawer
         mDrawer.closeDrawers();
     }
+
+    public void onDrawerClicked(View v){
+        mDrawer.openDrawer(GravityCompat.START);
+    }
+
 }

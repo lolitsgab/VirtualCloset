@@ -15,10 +15,11 @@
         android:layout_weight="0.1"/>
 
     <TextView
+        android:id="@+id/userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/helveticaneue_medium"
-        android:text="Sample Username"
+        android:text="User"
         android:layout_weight="0.9"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@android:color/white" />
