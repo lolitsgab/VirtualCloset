@@ -189,7 +189,6 @@ public class CarouselPicker extends ViewPager {
                     alert.show();
                 }
             });
-
             view.setTag(position);
             container.addView(view);
             return view;
