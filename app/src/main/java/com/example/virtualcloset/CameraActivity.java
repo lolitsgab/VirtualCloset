@@ -74,11 +74,40 @@ public class CameraActivity extends AppCompatActivity {
         (drawMode = this.findViewById(R.id.drawMode)).setOnClickListener(onClickListener);
         imageView = this.findViewById(R.id.capturedView);
         progressBar = findViewById(R.id.uploadProgress);
+        final TextView paintSize = findViewById(R.id.paintSize);
+
 
         animRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
         CHANGE_MODE = ObjectAnimator.ofInt(drawMode, "textColor",
                 Color.parseColor("#1de9b6"), Color.parseColor("#c62828"));
         CHANGE_MODE.setEvaluator(new ArgbEvaluator());
+        paintSize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch((int)imageView.paintSize) {
+                    case 5:
+                        imageView.paintSize = 15;
+                        paintSize.setText("" + 15);
+                        break;
+                    case 15:
+                        imageView.paintSize = 25;
+                        paintSize.setText("" + 25);
+                        break;
+                    case 25:
+                        imageView.paintSize = 35;
+                        paintSize.setText("" + 35);
+                        break;
+                    case 35:
+                        imageView.paintSize = 45;
+                        paintSize.setText("" + 45);
+                        break;
+                    case 45:
+                        imageView.paintSize = 5;
+                        paintSize.setText("" + 5);
+                        break;
+                }
+            }
+        });
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
