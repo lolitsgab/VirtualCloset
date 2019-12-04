@@ -25,6 +25,7 @@ public class DrawableImageView extends ImageView implements View.OnTouchListener
     private float upx = 0;
     private float upy = 0;
 
+    public float paintSize = 5;
     public Canvas canvas;
     public Bitmap original_bitmap;
     public Paint paint;
@@ -56,7 +57,7 @@ public class DrawableImageView extends ImageView implements View.OnTouchListener
         canvas = new Canvas(alteredBitmap);
         paint = new Paint();
         paint.setColor(Color.GREEN);
-        paint.setStrokeWidth(5);
+        paint.setStrokeWidth(paintSize);
         matrix = new Matrix();
         canvas.drawBitmap(bmp, matrix, paint);
         setImageBitmap(alteredBitmap);
@@ -69,10 +70,14 @@ public class DrawableImageView extends ImageView implements View.OnTouchListener
         switch (action)
         {
             case MotionEvent.ACTION_DOWN:
+                paint.setStrokeWidth(paintSize);
+
                 downx = getPointerCoords(event)[0];//event.getX();
                 downy = getPointerCoords(event)[1];//event.getY();
                 break;
             case MotionEvent.ACTION_MOVE:
+                paint.setStrokeWidth(paintSize);
+
                 upx = getPointerCoords(event)[0];//event.getX();
                 upy = getPointerCoords(event)[1];//event.getY();
                 canvas.drawLine(downx, downy, upx, upy, paint);
@@ -80,12 +85,13 @@ public class DrawableImageView extends ImageView implements View.OnTouchListener
                         new Scalar(
                                 paint.getColor() == Color.parseColor("#1de9b6") ?
                                         (byte)Imgproc.GC_FGD : (byte)Imgproc.GC_BGD
-                        ), 10);
+                        ), (int)paintSize);
                 invalidate();
                 downx = upx;
                 downy = upy;
                 break;
             case MotionEvent.ACTION_UP:
+                paint.setStrokeWidth(paintSize);
                 upx = getPointerCoords(event)[0];//event.getX();
                 upy = getPointerCoords(event)[1];//event.getY();
                 canvas.drawLine(downx, downy, upx, upy, paint);
@@ -93,12 +99,14 @@ public class DrawableImageView extends ImageView implements View.OnTouchListener
                         new Scalar(
                                 paint.getColor() == Color.parseColor("#1de9b6") ?
                                 (byte)Imgproc.GC_FGD : (byte)Imgproc.GC_BGD
-                        ), 10);
+                        ), (int)paintSize);
                 invalidate();
                 break;
             case MotionEvent.ACTION_CANCEL:
+                paint.setStrokeWidth(paintSize);
                 break;
             default:
+                paint.setStrokeWidth(paintSize);
                 break;
         }
 
