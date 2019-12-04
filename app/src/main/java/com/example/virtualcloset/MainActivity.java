@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> starred;
     public ImageView starIcon;
 
+    public ImageView wardrobeButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +93,15 @@ public class MainActivity extends AppCompatActivity {
         cameraActvivityButton = this.findViewById(R.id.startCameraActivityButton);
         topCarousel = this.findViewById(R.id.carouselTop);
         bottomCarousel = this.findViewById(R.id.carouselBottom);
+        wardrobeButton = this.findViewById(R.id.wardrobe);
 
+        wardrobeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //STAR FUNCTION
         starred = new ArrayList<>();
